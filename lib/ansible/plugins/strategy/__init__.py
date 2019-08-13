@@ -882,6 +882,14 @@ class StrategyBase:
 
         result = self._tqm.RUN_OK
 
+        have_work = False
+        for handler, hosts in self._notified_handlers.items():
+            if len(hosts) > 0:
+                have_work = True
+                break
+        if not have_work:
+            return result
+
         for handler_block in iterator._play.handlers:
             # FIXME: handlers need to support the rescue/always portions of blocks too,
             #        but this may take some work in the iterator and gets tricky when
