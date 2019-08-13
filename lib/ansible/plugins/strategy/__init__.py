@@ -374,6 +374,13 @@ class StrategyBase:
             for handler_block in handler_blocks:
                 for handler_task in handler_block.block:
                     if handler_task.name:
+                        if '{{' not in handler_task.name and '{{' not in handler_task.get_name():
+                            if handler_task.name == handler_name:
+                                return handler_task
+                            else:
+                                if handler_task.get_name() == handler_name:
+                                    return handler_task
+                            continue
                         handler_vars = self._variable_manager.get_vars(play=iterator._play, task=handler_task)
                         templar = Templar(loader=self._loader, variables=handler_vars)
                         try:
@@ -406,6 +413,13 @@ class StrategyBase:
         def parent_handler_match(target_handler, handler_name):
             if target_handler:
                 if isinstance(target_handler, (TaskInclude, IncludeRole)):
+                    if '{{' not in target_handler.name and '{{' not in target_handler.get_name():
+                        if target_handler.name == handler_name:
+                            return True
+                        else:
+                            if target_handler.get_name() == handler_name:
+                                return True
+                        return False
                     try:
                         handler_vars = self._variable_manager.get_vars(play=iterator._play, task=target_handler)
                         templar = Templar(loader=self._loader, variables=handler_vars)
