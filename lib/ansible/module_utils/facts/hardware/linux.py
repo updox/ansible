@@ -455,7 +455,7 @@ class LinuxHardware(Hardware):
         for fields in mtab_entries:
             device, mount, fstype, options = fields[0], fields[1], fields[2], fields[3]
 
-            if not device.startswith('/') and ':/' not in device:
+            if not device.startswith('/') and ':' not in device:
                 continue
 
             if fstype == 'none':
