@@ -657,4 +657,7 @@ class FilterModule(object):
 
             # Misc
             'random_mac': random_mac,
+
+            # string formatting
+            'split': str.split
         }
