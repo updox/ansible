@@ -376,7 +376,7 @@ class StrategyBase:
             for handler_block in reversed(handler_blocks):
                 for handler_task in handler_block.block:
                     if handler_task.name:
-                        if not handler_task.cached_name:
+                        if not handler_task.cached_name and '{{' in handler_task.name:
                             templar = self.get_handler_templar(handler_task, iterator)
                             handler_task.name = templar.template(handler_task.name)
                             handler_task.cached_name = True
@@ -533,9 +533,8 @@ class StrategyBase:
                                 for listening_handler_block in iterator._play.handlers:
                                     for listening_handler in listening_handler_block.block:
                                         listeners = getattr(listening_handler, 'listen', []) or []
-                                        templar = self.get_handler_templar(listening_handler, iterator)
                                         listeners = listening_handler.get_validated_value(
-                                            'listen', listening_handler._valid_attrs['listen'], listeners, templar
+                                            'listen', listening_handler._valid_attrs['listen'], listeners, None  # templar is not needed for this validation
                                         )
                                         if handler_name not in listeners:
                                             continue
