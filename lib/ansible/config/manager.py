@@ -195,15 +195,21 @@ def find_ini_config_file(warnings=None):
     warn_cmd_public = False
     try:
         cwd = os.getcwd()
-        perms = os.stat(cwd)
-        cwd_cfg = os.path.join(cwd, "ansible.cfg")
-        if perms.st_mode & stat.S_IWOTH:
-            # Working directory is world writable so we'll skip it.
-            # Still have to look for a file here, though, so that we know if we have to warn
-            if os.path.exists(cwd_cfg):
-                warn_cmd_public = True
-        else:
-            potential_paths.append(cwd_cfg)
+        while True:
+            perms = os.stat(cwd)
+            cwd_cfg = os.path.join(cwd, "ansible.cfg")
+            if perms.st_mode & stat.S_IWOTH:
+                # Working directory is world writable so we'll skip it.
+                # Still have to look for a file here, though, so that we know if we have to warn
+                if os.path.exists(cwd_cfg):
+                    warn_cmd_public = True
+            else:
+                potential_paths.append(cwd_cfg)
+            parent = os.path.dirname(cwd)
+            if os.path.samefile(cwd, parent):
+                # We're at the root directory, stop.
+                break
+            cwd = parent
     except OSError:
         # If we can't access cwd, we'll simply skip it as a possible config source
         pass
