@@ -433,7 +433,7 @@ class VaultCLI(CLI):
     def execute_edit(self):
         ''' open and decrypt an existing vaulted file in an editor, that will be encrypted again when closed'''
         for f in context.CLIARGS['args']:
-            self.editor.edit_file(f)
+            self.editor.edit_file(f, self.encrypt_secret, vault_id=self.encrypt_vault_id)
 
     def execute_view(self):
         ''' open, decrypt and view an existing vaulted file using a pager using the supplied vault secret '''
