@@ -938,18 +938,21 @@ class VaultEditor:
             display.warning(u"%s does not exist, creating..." % to_text(dirname))
             makedirs_safe(dirname)
 
-        # FIXME: If we can raise an error here, we can probably just make it
-        # behave like edit instead.
         if os.path.isfile(filename):
-            raise AnsibleError("%s exists, please use 'edit' instead" % filename)
+            self.edit_file(filename, secret, vault_id=vault_id)
+            return
 
         self._edit_file_helper(filename, secret, vault_id=vault_id)
 
-    def edit_file(self, filename):
+    def edit_file(self, filename, secret, vault_id=None):
         vault_id_used = None
         vault_secret_used = None
         # follow the symlink
         filename = self._real_path(filename)
+
+        if not os.path.isfile(filename):
+            self.create_file(filename, secret, vault_id=vault_id)
+            return
 
         b_vaulttext = self.read_data(filename)
 
