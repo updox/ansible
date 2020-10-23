@@ -738,6 +738,9 @@ class ActionBase(with_metaclass(ABCMeta, object)):
         # make sure modules are aware if they need to keep the remote files
         module_args['_ansible_keep_remote_files'] = C.DEFAULT_KEEP_REMOTE_FILES
 
+        # let module know if they should ignore SELinux bindings
+        module_args['_ansible_ignore_missing_selinux_bindings'] = C.IGNORE_MISSING_SELINUX_BINDINGS
+
         # make sure all commands use the designated temporary directory if created
         if self._is_become_unprivileged():  # force fallback on remote_tmp as user cannot normally write to dir
             module_args['_ansible_tmpdir'] = None

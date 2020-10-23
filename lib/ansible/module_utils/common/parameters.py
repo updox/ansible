@@ -36,9 +36,10 @@ PASS_VARS = {
     'tmpdir': ('_tmpdir', None),
     'verbosity': ('_verbosity', 0),
     'version': ('ansible_version', '0.0'),
+    'ignore_missing_selinux_bindings': ('ignore_missing_selinux_bindings', False)
 }
 
-PASS_BOOLS = ('check_mode', 'debug', 'diff', 'keep_remote_files', 'no_log')
+PASS_BOOLS = ('check_mode', 'debug', 'diff', 'keep_remote_files', 'no_log', 'ignore_missing_selinux_bindings')
 
 
 def _return_datastructure_name(obj):

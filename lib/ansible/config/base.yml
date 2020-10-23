@@ -1464,6 +1464,18 @@ IGNORE_ROLE_DEPENDENCIES:
   env: [{name: ANSIBLE_IGNORE_ROLE_DEPENDENCIES}]
   ini: [{key: ignore_role_dependencies, section: defaults}]
   type: boolean
+IGNORE_MISSING_SELINUX_BINDINGS:
+  name: Ignore missing SELinux bindings when performing file operations.
+  default: False
+  description:
+    - Allows modules that perform file operations to be run on a system where the SELinux python bindings are missing
+      or not yet present.
+  env: [{name: ANSIBLE_IGNORE_MISSING_SELINUX_BINDINGS}]
+  ini:
+    - {key: ignore_missing_selinux_bindings, section: defaults}
+  vars:
+    - {name: ansible_ignore_missing_selinux_bindings}
+  version_added: "2.9"
 INTERPRETER_PYTHON_DISTRO_MAP:
   name: Mapping of known included platform pythons for various Linux distros
   default:
