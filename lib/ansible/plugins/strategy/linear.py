@@ -410,7 +410,6 @@ class StrategyModule(StrategyBase):
                         # included hosts get the task list while those excluded get an equal-length
                         # list of noop tasks, to make sure that they continue running in lock-step
                         try:
-                            # TODO
                             new_blocks = self._load_do_block(do_block, iterator=iterator)
 
                             display.debug("iterating over new_blocks loaded from do blocks")
