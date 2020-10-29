@@ -117,7 +117,7 @@ class TaskInclude(Task):
         we need to include the args of the include into the vars as
         they are params to the included tasks. But ONLY for 'include'
         '''
-        if self.action not in C._ACTION_INCLUDE:
+        if self.action not in (C._ACTION_INCLUDE, C._ACTION_DO):
             all_vars = super(TaskInclude, self).get_vars()
         else:
             all_vars = dict()
