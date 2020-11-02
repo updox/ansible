@@ -1456,6 +1456,14 @@ INTERPRETER_PYTHON:
     value of ``auto_legacy`` provides all the same behavior, but for backwards-compatibility with older Ansible releases
     that always defaulted to ``/usr/bin/python``, will use that interpreter if present (and issue a warning that the
     default behavior will change to that of ``auto`` in a future Ansible release.
+IGNORE_ROLE_DEPENDENCIES:
+  name: Ignore role dependencies
+  default: False
+  description:
+    - Skip dependencies for roles.
+  env: [{name: ANSIBLE_IGNORE_ROLE_DEPENDENCIES}]
+  ini: [{key: ignore_role_dependencies, section: defaults}]
+  type: boolean
 INTERPRETER_PYTHON_DISTRO_MAP:
   name: Mapping of known included platform pythons for various Linux distros
   default:
