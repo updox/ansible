@@ -21,6 +21,7 @@ __metaclass__ = type
 
 import os
 
+from ansible import constants as C
 from ansible.errors import AnsibleError, AnsibleParserError, AnsibleAssertionError
 from ansible.module_utils.six import iteritems, binary_type, text_type
 from ansible.module_utils.common._collections_compat import Container, Mapping, Set, Sequence
@@ -303,7 +304,7 @@ class Role(Base, Conditional, Taggable, CollectionSearch):
         '''
 
         deps = []
-        if self._metadata:
+        if self._metadata and not C.IGNORE_ROLE_DEPENDENCIES:
             for role_include in self._metadata.dependencies:
                 r = Role.load(role_include, play=self._play, parent_role=self)
                 deps.append(r)
