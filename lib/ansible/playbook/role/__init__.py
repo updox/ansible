@@ -142,17 +142,31 @@ class Role(Base, Become, Conditional, Taggable, CollectionSearch):
             # specified for a role as the key and the Role() object itself.
             # We use frozenset to make the dictionary hashable.
 
-            params = role_include.get_role_params()
-            if role_include.when is not None:
-                params['when'] = role_include.when
-            if role_include.tags is not None:
-                params['tags'] = role_include.tags
-            if from_files is not None:
-                params['from_files'] = from_files
+            # This grabs the vars from the dep_chain which if you're paranoid might
+            # warrant re-running the role but I wouldn't notice.
+            #params = role_include.get_role_params()
+            params = {}
+            #if role_include.when is not None:
+            #    params['when'] = role_include.when
+            #if role_include.tags is not None:
+            #    params['tags'] = role_include.tags
+            #if from_files is not None:
+            #   params['from_files'] = from_files
+            # This is the one that people actually use.
+            # roles:
+            #   - example
+            #   - role: example
+            #     vars:
+            #       role_var: "blah"
+            # should be ran twice which enables patterns like
+            # roles:
+            #   - {role: file_monitor, vars: {path: '/var/log/messages'}}
+            #   - {role: file_monitor, vars: {path: '/var/log/secure'}}
+            #
             if role_include.vars:
                 params['vars'] = role_include.vars
 
-            params['from_include'] = from_include
+            #params['from_include'] = from_include
 
             hashed_params = hash_params(params)
             if role_include.role in play.ROLE_CACHE:
