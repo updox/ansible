@@ -167,7 +167,7 @@ class LookupModule(LookupBase):
             if filters:
                 if isinstance(filters, list):
                     filters = ' | '.join(filters)
-                sublist = self._templar.template("{{ %s | %s }}" % (sublist, filters))
+                sublist = self._templar.template("%s | %s" % (sublist, filters), convert_bare=True)
 
             for item1 in sublist:
                 ret.append((item0, item1))
