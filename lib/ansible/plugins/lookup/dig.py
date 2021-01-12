@@ -290,12 +290,18 @@ class LookupModule(LookupBase):
                     except Exception as e:
                         ret.append(str(e))
 
-        except dns.resolver.NXDOMAIN:
+        except dns.resolver.NXDOMAIN as e:
             ret.append('NXDOMAIN')
-        except dns.resolver.NoAnswer:
+            if ('fail_error', True) in kwargs.items():
+                raise AnsibleError("dns.resolver NXDOMAIN %s" % to_native(e))
+        except dns.resolver.NoAnswer as e
             ret.append("")
-        except dns.resolver.Timeout:
+            if ('fail_error', True) in kwargs.items():
+                raise AnsibleError("dns.resolver NoAnswer %s" % to_native(e))
+        except dns.resolver.Timeout as e
             ret.append('')
+            if ('fail_error', True) in kwargs.items():
+                raise AnsibleError("dns.resolver Timeout %s" % to_native(e))
         except dns.exception.DNSException as e:
             raise AnsibleError("dns.resolver unhandled exception %s" % to_native(e))
 
