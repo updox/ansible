@@ -464,6 +464,10 @@ class VariableManager:
             variables['ansible_play_name'] = play.get_name()
 
         if task:
+            task_path = task.get_path().rsplit(':')
+            variables['task_path'] = ':'.join(task_path[:-1])
+            variables['task_line'] = task_path[-1]
+
             if task._role:
                 variables['role_name'] = task._role.get_name(include_role_fqcn=False)
                 variables['role_path'] = task._role._role_path
