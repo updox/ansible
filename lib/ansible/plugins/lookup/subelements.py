@@ -89,7 +89,7 @@ from ansible.plugins.lookup import LookupBase
 from ansible.utils.listify import listify_lookup_plugin_terms
 
 
-FLAGS = ('skip_missing',)
+FLAGS = ('skip_missing','filter')
 
 
 class LookupModule(LookupBase):
@@ -138,6 +138,7 @@ class LookupModule(LookupBase):
                 continue
 
             skip_missing = boolean(flags.get('skip_missing', False), strict=False)
+            filters = flags.get('filter', False)
             subvalue = item0
             lastsubkey = False
             sublist = []
@@ -162,6 +163,12 @@ class LookupModule(LookupBase):
                         raise AnsibleError("the key %s should point to a list, got '%s'" % (subkey, subvalue[subkey]))
                     else:
                         sublist = subvalue.pop(subkey, [])
+
+            if filters:
+                if isinstance(filters, list):
+                    filters = ' | '.join(filters)
+                sublist = self._templar.template("{{ %s | %s }}" % (sublist, filters))
+
             for item1 in sublist:
                 ret.append((item0, item1))
 
