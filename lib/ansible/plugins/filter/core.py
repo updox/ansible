@@ -67,9 +67,9 @@ def to_yaml(a, *args, **kw):
     return to_text(transformed)
 
 
-def to_nice_yaml(a, indent=4, *args, **kw):
+def to_nice_yaml(a, indent=2, sort_keys=False, *args, **kw):
     '''Make verbose, human readable yaml'''
-    transformed = yaml.dump(a, Dumper=AnsibleDumper, indent=indent, allow_unicode=True, default_flow_style=False, **kw)
+    transformed = yaml.dump(a, Dumper=AnsibleDumper, indent=indent, allow_unicode=True, default_flow_style=False, sort_keys=sort_keys, **kw)
     return to_text(transformed)
 
 
