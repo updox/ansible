@@ -231,7 +231,7 @@ class Role(Base, Conditional, Taggable, CollectionSearch):
 
         # reset collections list; roles do not inherit collections from parents, just use the defaults
         # FUTURE: use a private config default for this so we can allow it to be overridden later
-        self.collections = []
+        #self.collections = []
 
         # configure plugin/collection loading; either prepend the current role's collection or configure legacy plugin loading
         # FIXME: need exception for explicit ansible.legacy?
