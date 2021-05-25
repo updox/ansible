@@ -4,6 +4,7 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+from ansible import constants as C
 from ansible.module_utils.six import string_types
 from ansible.playbook.attribute import FieldAttribute
 from ansible.utils.collection_loader import AnsibleCollectionConfig
@@ -31,6 +32,10 @@ def _ensure_default_collection(collection_list=None):
     return collection_list
 
 
+def _ensure_global_collections(collection_list=None):
+    collection_list.extend(C.COLLECTIONS)
+    return collection_list
+
 class CollectionSearch:
 
     # this needs to be populated before we can resolve tasks/roles/etc
@@ -44,6 +49,9 @@ class CollectionSearch:
 
         # this will only be called if someone specified a value; call the shared value
         _ensure_default_collection(collection_list=ds)
+
+        # add global collection search from config
+        _ensure_global_collections(collection_list=ds)
 
         if not ds:  # don't return an empty collection list, just return None
             return None

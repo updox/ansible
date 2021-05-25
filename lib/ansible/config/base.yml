@@ -242,6 +242,16 @@ COLLECTIONS_PATHS:
   - key: collections_path
     section: defaults
     version_added: '2.10'
+COLLECTIONS:
+  name: global collection search
+  description: List of collections to search in all plays and roles
+  type: list
+  default: []
+  env:
+  - name: ANSIBLE_COLLECTIONS
+  ini:
+  - key: collections
+    section: defaults
 COLLECTIONS_ON_ANSIBLE_VERSION_MISMATCH:
   name: Defines behavior when loading a collection that does not support the current Ansible version
   description:
