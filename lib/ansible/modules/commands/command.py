@@ -293,11 +293,9 @@ def main():
 
     if not module.check_mode:
         rc, out, err = module.run_command(args, executable=executable, use_unsafe_shell=shell, encoding=None, data=stdin, binary_data=(not stdin_add_newline))
-    elif creates or removes:
+    else:
         rc = 0
         out = err = b'Command would have run if not in check mode'
-    else:
-        module.exit_json(msg="skipped, running in check mode", skipped=True)
 
     endd = datetime.datetime.now()
     delta = endd - startd
