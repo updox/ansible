@@ -227,6 +227,16 @@ class Play(Base, Taggable, Become, CollectionSearch):
 
         block_list = []
 
+        # create a block containing a single flush handlers meta
+        # task, so we can be sure to run handlers at certain points
+        # of the playbook execution
+        flush_block = Block.load(
+            data={'meta': 'flush_handlers'},
+            play=self,
+            variable_manager=self._variable_manager,
+            loader=self._loader
+        )
+
         if len(self.roles) > 0:
             for r in self.roles:
                 # Don't insert tasks from ``import/include_role``, preventing
@@ -234,6 +244,7 @@ class Play(Base, Taggable, Become, CollectionSearch):
                 if r.from_include:
                     continue
                 block_list.extend(r.compile(play=self))
+                block_list.append(flush_block)
 
         return block_list
 
