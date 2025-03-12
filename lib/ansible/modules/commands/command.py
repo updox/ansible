@@ -79,6 +79,12 @@ options:
     version_added: "2.8"
     type: bool
     default: yes
+  mock:
+    description:
+      - Mock the result code and output when running in check mode.
+      - The C(rc), C(stdout), and C(stderr) keys can be provided.
+    version_added: "2.8"
+    type: dict
 notes:
     -  If you want to run a command through the shell (say you are using C(<), C(>), C(|), etc), you actually want the M(shell) module instead.
        Parsing shell metacharacters can lead to unexpected commands being executed if quoting is not done correctly so it is more secure to
@@ -224,6 +230,7 @@ def main():
             stdin=dict(required=False),
             stdin_add_newline=dict(type='bool', default=True),
             strip_empty_ends=dict(type='bool', default=True),
+            mock=dict(type='dict')
         ),
         supports_check_mode=True,
     )
@@ -238,6 +245,7 @@ def main():
     stdin = module.params['stdin']
     stdin_add_newline = module.params['stdin_add_newline']
     strip = module.params['strip_empty_ends']
+    mock = module.params['mock']
 
     if not shell and executable:
         module.warn("As of Ansible 2.4, the parameter 'executable' is no longer supported with the 'command' module. Not using '%s'." % executable)
@@ -293,11 +301,14 @@ def main():
 
     if not module.check_mode:
         rc, out, err = module.run_command(args, executable=executable, use_unsafe_shell=shell, encoding=None, data=stdin, binary_data=(not stdin_add_newline))
-    elif creates or removes:
-        rc = 0
-        out = err = b'Command would have run if not in check mode'
     else:
-        module.exit_json(msg="skipped, running in check mode", skipped=True)
+        if mock:
+            rc = mock.get('rc', 0)
+            out = mock.get('stdout', '')
+            err = mock.get('stderr', '')
+        else:
+            rc = 0
+            out = err = b'Command would have run if not in check mode'
 
     endd = datetime.datetime.now()
     delta = endd - startd
